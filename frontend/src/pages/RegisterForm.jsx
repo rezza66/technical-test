@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const API_URL = "http://localhost:5000";
 
@@ -11,18 +10,11 @@ const RegisterForm = ({ onSwitchToLogin }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    console.log({
-      us_name: name,
-      us_email: email,
-      us_password: password,
-      us_phone_number: phoneNumber,
-      us_address: address,
-    });
+    
     try {
       const response = await axios.post(`${API_URL}/auth/register`, {
         us_name: name,
@@ -32,11 +24,10 @@ const RegisterForm = ({ onSwitchToLogin }) => {
         us_address: address,
       });
 
-      if (response.status !== 200) {
+      if (response.status !== 201) {
         throw new Error(response.data.message || "Registration failed");
       }
 
-      navigate('/auth')
       onSwitchToLogin();
     } catch (err) {
       setError(err.message);
